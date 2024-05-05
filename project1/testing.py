@@ -30,22 +30,26 @@ class RecordManager:
 
     def __init__(self, filename: str) -> None:
         self.filename = filename
-        self.records: List[Record] = []
+        self.records = []
         self.load_records()
 
     def load_records(self) -> None:
 
         """Функция предоставления иформации в записи."""
 
-        with open(self.filename, "r") as f:
-            for line in f:
-                data = line.strip().split(':')
-                if len(data) >= 8:
-                    date = data[1].strip()
-                    category = data[3].strip()
-                    amount = float(data[5].strip())
-                    description = data[7].strip()
-                    self.records.append(Record(date, category, amount, description))
+        try:
+            with open(self.filename, "r") as f:
+                lines = f.read().split("\n\n")  # Разделяем записи по двойному переносу строки
+                for line in lines:
+                    data = line.strip().split('\n')
+                    if len(data) >= 4:
+                        date = data[0].split(': ')[1].strip()
+                        category = data[1].split(': ')[1].strip()
+                        amount = float(data[2].split(': ')[1].strip())
+                        description = data[3].split(': ')[1].strip()
+                        self.records.append(Record(date, category, amount, description))
+        except FileNotFoundError:
+            print("Файл не найден. Создан новый файл records.txt.")
 
     def save_records(self) -> None:
 
@@ -81,7 +85,7 @@ class RecordManager:
 
 if __name__ == "__main__":
 
-    filename = "records.txt"
+    filename = "./records.txt"
     record_manager = RecordManager(filename)
 
     while True:
