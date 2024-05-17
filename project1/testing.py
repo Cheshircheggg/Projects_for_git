@@ -6,21 +6,26 @@ class Record:
     """Класс для хранения информации о записи."""
 
     def __init__(self, date: str, category: str, amount: float, description: str) -> None:
+        """Конструктор класса Record."""
         self.date = date
         self.category = category
         self.amount = amount
         self.description = description
 
     def get_date(self) -> str:
+        """Метод для получения даты записи."""
         return self.date
 
     def get_category(self) -> str:
+        """Метод для получения категории записи."""
         return self.category
 
     def get_amount(self) -> float:
+        """Метод для получения суммы записи."""
         return self.amount
 
     def get_description(self) -> str:
+        """Метод для получения описания записи."""
         return self.description
 
 
@@ -29,6 +34,7 @@ class RecordManager:
     """Класс для управления иформацией в записи."""
 
     def __init__(self, filename: str) -> None:
+        """Конструктор класса RecordManager."""
         self.filename = filename
         self.records = []
         self.load_records()
@@ -39,7 +45,7 @@ class RecordManager:
 
         try:
             with open(self.filename, "r") as f:
-                lines = f.read().split("\n\n")  # Разделяем записи по двойному переносу строки
+                lines = f.read().split("\n\n")
                 for line in lines:
                     data = line.strip().split('\n')
                     if len(data) >= 4:
@@ -52,9 +58,7 @@ class RecordManager:
             print("Файл не найден. Создан новый файл records.txt.")
 
     def save_records(self) -> None:
-
-        """Функция сохранения записи."""
-
+        """Метод для сохранения записей в файл."""
         with open(self.filename, "w") as f:
             for record in self.records:
                 f.write("Дата: {}\n".format(record.get_date()))
